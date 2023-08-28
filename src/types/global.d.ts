@@ -6,3 +6,8 @@ export type PageResult<T> = {
   pages: number
   pageSize: number
 }
+// 通用分页参数类型
+export type PageParams = {
+  page?: number
+  pageSize?: number
+}
