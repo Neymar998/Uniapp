@@ -17,3 +17,12 @@ export type HotItem = {
   title: string
   type: string
 }
+export type GuessItem = {
+  desc: string
+  discount: number
+  id: string
+  name: string
+  orderNum: number
+  picture: string
+  price: number
+}
