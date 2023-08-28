@@ -4,10 +4,11 @@ import CustomNavbar from './components/CustomNavbar.vue'
 import GjdSwiper from '@/components/GjdSwiper.vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
-import type { BannerItem } from '@/types/home'
+import type { BannerItem, CategoryItem } from '@/types/home'
 import CategoryPanel from './components/CategoryPanel.vue'
 
 const bannerList = ref<BannerItem[]>([])
+const categoryList = ref<CategoryItem[]>([])
 
 const getHomeBannerData = async () => {
   const res = await getHomeBannerAPI()
@@ -15,6 +16,7 @@ const getHomeBannerData = async () => {
 }
 const getHomeCategoryData = async () => {
   const res = await getHomeCategoryAPI()
+  categoryList.value = res.result
 }
 onLoad(() => {
   getHomeBannerData()
@@ -25,7 +27,7 @@ onLoad(() => {
 <template>
   <CustomNavbar />
   <GjdSwiper :list="bannerList" />
-  <CategoryPanel />
+  <CategoryPanel :list="categoryList" />
   <view class="index">index</view>
 </template>
 
