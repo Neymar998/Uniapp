@@ -37,14 +37,31 @@ onLoad(() => {
 })
 
 const guessRef = ref<GjdGuessInstance>()
+const isTriggered = ref(false)
 const onScrolltolower = () => {
   guessRef.value?.getMore()
+}
+const onRefresherrefresh = async () => {
+  isTriggered.value = true
+  await Promise.all([
+    getHomeBannerData(),
+    getHomeCategoryData(),
+    getHomeHotData(),
+  ])
+  isTriggered.value = false
 }
 </script>
 
 <template>
   <CustomNavbar />
-  <scroll-view @scrolltolower="onScrolltolower" scroll-y class="scroll-view">
+  <scroll-view
+    refresher-enabled
+    :refresher-triggered="isTriggered"
+    @refresherrefresh="onRefresherrefresh"
+    @scrolltolower="onScrolltolower"
+    scroll-y
+    class="scroll-view"
+  >
     <GjdSwiper :list="bannerList" />
     <CategoryPanel :list="categoryList" />
     <HotPanel :list="hotList" />
