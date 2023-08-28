@@ -5,6 +5,7 @@ import GjdSwiper from '@/components/GjdSwiper.vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 import type { BannerItem } from '@/types/home'
+import CategoryPanel from './components/CategoryPanel.vue'
 
 const bannerList = ref<BannerItem[]>([])
 
@@ -21,9 +22,13 @@ onLoad(() => {
 <template>
   <CustomNavbar />
   <GjdSwiper :list="bannerList" />
+  <CategoryPanel />
   <view class="index">index</view>
 </template>
 
 <style lang="scss">
 //
+page {
+  background-color: #f7f7f7;
+}
 </style>
