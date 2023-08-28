@@ -1,14 +1,20 @@
 <script setup lang="ts">
-import { getHomeBannerAPI, getHomeCategoryAPI } from '@/services/home'
-import CustomNavbar from './components/CustomNavbar.vue'
-import GjdSwiper from '@/components/GjdSwiper.vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
-import type { BannerItem, CategoryItem } from '@/types/home'
+import type { BannerItem, CategoryItem, HotItem } from '@/types/home'
+import {
+  getHomeBannerAPI,
+  getHomeCategoryAPI,
+  getHomeHotAPI,
+} from '@/services/home'
+import GjdSwiper from '@/components/GjdSwiper.vue'
+import CustomNavbar from './components/CustomNavbar.vue'
 import CategoryPanel from './components/CategoryPanel.vue'
+import HotPanel from './components/HotPanel.vue'
 
 const bannerList = ref<BannerItem[]>([])
 const categoryList = ref<CategoryItem[]>([])
+const hotList = ref<HotItem[]>([])
 
 const getHomeBannerData = async () => {
   const res = await getHomeBannerAPI()
@@ -18,9 +24,15 @@ const getHomeCategoryData = async () => {
   const res = await getHomeCategoryAPI()
   categoryList.value = res.result
 }
+const getHomeHotData = async () => {
+  const res = await getHomeHotAPI()
+  hotList.value = res.result
+}
+
 onLoad(() => {
   getHomeBannerData()
   getHomeCategoryData()
+  getHomeHotData()
 })
 </script>
 
@@ -28,6 +40,7 @@ onLoad(() => {
   <CustomNavbar />
   <GjdSwiper :list="bannerList" />
   <CategoryPanel :list="categoryList" />
+  <HotPanel :list="hotList" />
   <view class="index">index</view>
 </template>
 
