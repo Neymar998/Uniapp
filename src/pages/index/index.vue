@@ -38,15 +38,20 @@ onLoad(() => {
 
 const guessRef = ref<GjdGuessInstance>()
 const isTriggered = ref(false)
+// 下拉加载更多
 const onScrolltolower = () => {
   guessRef.value?.getMore()
 }
+// 下拉刷新
 const onRefresherrefresh = async () => {
   isTriggered.value = true
+  // 重置数据
+  guessRef.value?.resetData()
   await Promise.all([
     getHomeBannerData(),
     getHomeCategoryData(),
     getHomeHotData(),
+    guessRef.value?.getMore(),
   ])
   isTriggered.value = false
 }
