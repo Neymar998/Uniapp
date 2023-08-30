@@ -11,6 +11,7 @@ import {
 import CustomNavbar from './components/CustomNavbar.vue'
 import CategoryPanel from './components/CategoryPanel.vue'
 import HotPanel from './components/HotPanel.vue'
+import PageSkeleton from './components/PageSkeleton.vue'
 import type { GjdGuessInstance } from '@/types/components'
 
 const bannerList = ref<BannerItem[]>([])
@@ -29,11 +30,16 @@ const getHomeHotData = async () => {
   const res = await getHomeHotAPI()
   hotList.value = res.result
 }
+const isLoading = ref(false)
 
-onLoad(() => {
-  getHomeBannerData()
-  getHomeCategoryData()
-  getHomeHotData()
+onLoad(async () => {
+  isLoading.value = true
+  await Promise.all([
+    getHomeBannerData(),
+    getHomeCategoryData(),
+    getHomeHotData(),
+  ])
+  isLoading.value = false
 })
 
 const guessRef = ref<GjdGuessInstance>()
@@ -67,10 +73,13 @@ const onRefresherrefresh = async () => {
     scroll-y
     class="scroll-view"
   >
-    <GjdSwiper :list="bannerList" />
-    <CategoryPanel :list="categoryList" />
-    <HotPanel :list="hotList" />
-    <GjdGuess ref="guessRef" />
+    <PageSkeleton v-if="isLoading" />
+    <template v-else>
+      <GjdSwiper :list="bannerList" />
+      <CategoryPanel :list="categoryList" />
+      <HotPanel :list="hotList" />
+      <GjdGuess ref="guessRef" />
+    </template>
   </scroll-view>
 </template>
 
