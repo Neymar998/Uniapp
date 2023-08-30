@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { getHotRecommendAPI } from '@/services/hot'
+import { onLoad } from '@dcloudio/uni-app'
+
 // 热门推荐页 标题和url
 const hotMap = [
   { type: '1', title: '特惠推荐', url: '/hot/preference' },
@@ -14,6 +17,15 @@ const query = defineProps<{
 
 const currentHotMap = hotMap.find((v) => v.type === query.type)
 uni.setNavigationBarTitle({ title: currentHotMap!.title })
+
+// 获取热门推荐数据
+const getHotRecommendData = async () => {
+  const res = await getHotRecommendAPI(currentHotMap!.url)
+}
+
+onLoad(() => {
+  getHotRecommendData()
+})
 </script>
 
 <template>
