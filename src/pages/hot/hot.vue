@@ -3,6 +3,7 @@ import { getHotRecommendAPI } from '@/services/hot'
 import type { SubTypeItem } from '@/types/hot'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
+
 // 热门推荐页 标题和url
 const hotMap = [
   { type: '1', title: '特惠推荐', url: '/hot/preference' },
@@ -21,6 +22,7 @@ uni.setNavigationBarTitle({ title: currentHotMap!.title })
 const bannerPicture = ref('')
 const subTypes = ref<SubTypeItem[]>([])
 const activeIndex = ref(0)
+
 // 获取热门推荐数据
 const getHotRecommendData = async () => {
   const res = await getHotRecommendAPI(currentHotMap!.url)
@@ -28,6 +30,19 @@ const getHotRecommendData = async () => {
   subTypes.value = res.result.subTypes
 }
 
+// Tap页滚动触底加载更多
+const onscrolltolower = async () => {
+  // 当前tap页
+  const currentSubType = subTypes.value[activeIndex.value]
+  currentSubType.goodsItems.page++
+  const res = await getHotRecommendAPI(currentHotMap!.url, {
+    subType: currentSubType.id,
+    page: currentSubType.goodsItems.page,
+    pageSize: currentSubType.goodsItems.pageSize,
+  })
+  const newSubType = res.result.subTypes[activeIndex.value]
+  currentSubType.goodsItems.items.push(...newSubType.goodsItems.items)
+}
 onLoad(() => {
   getHotRecommendData()
 })
@@ -57,6 +72,7 @@ onLoad(() => {
       v-for="(item, index) in subTypes"
       v-show="index === activeIndex"
       :key="item.id"
+      @scrolltolower="onscrolltolower"
     >
       <view class="goods">
         <navigator
