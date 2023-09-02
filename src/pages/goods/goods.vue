@@ -4,12 +4,24 @@ import { onLoad } from '@dcloudio/uni-app'
 import type { GoodsResult } from '@/types/goods'
 import { ref } from 'vue'
 
+import ServicePanel from './components/ServicePanel.vue'
+import AddressPanel from './components/AddressPanel.vue'
+
 const { safeAreaInsets } = uni.getSystemInfoSync()
 const query = defineProps<{
   id: string
 }>()
 const goods = ref<GoodsResult>()
 const currentSwiperIndex = ref(0)
+const popup = ref<{
+  open: (type?: UniHelper.UniPopupType) => void
+  close: () => void
+}>()
+const popupName = ref<'Address' | 'Service'>()
+const popUpChangeName = (name: typeof popupName.value) => {
+  popupName.value = name
+  popup.value?.open()
+}
 
 const getGoodsByIdData = async () => {
   const res = await getGoodsByIdAPI(query.id)
@@ -42,7 +54,7 @@ onLoad(() => {
           </swiper-item>
         </swiper>
         <view class="indicator">
-          <text class="current">{{ currentSwiperIndex }}</text>
+          <text class="current">{{ currentSwiperIndex + 1 }}</text>
           <text class="split">/</text>
           <text class="total">{{ goods?.mainPictures.length }}</text>
         </view>
@@ -64,11 +76,11 @@ onLoad(() => {
           <text class="label">选择</text>
           <text class="text ellipsis"> 请选择商品规格 </text>
         </view>
-        <view class="item arrow">
+        <view class="item arrow" @tap="popUpChangeName('Address')">
           <text class="label">送至</text>
           <text class="text ellipsis"> 请选择收获地址 </text>
         </view>
-        <view class="item arrow">
+        <view class="item arrow" @tap="popUpChangeName('Service')">
           <text class="label">服务</text>
           <text class="text ellipsis"> 无忧退 快速退款 免费包邮 </text>
         </view>
@@ -149,6 +161,11 @@ onLoad(() => {
       <view class="buynow"> 立即购买 </view>
     </view>
   </view>
+
+  <uni-popup ref="popup" type="bottom" background-color="#fff">
+    <AddressPanel v-show="popupName === 'Address'" @close="popup?.close()" />
+    <ServicePanel v-show="popupName === 'Service'" @close="popup?.close()" />
+  </uni-popup>
 </template>
 
 <style lang="scss">
