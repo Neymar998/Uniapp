@@ -46,7 +46,13 @@
 			"style": {
 				"navigationBarTitleText": "商品详情"
 			}
-		}
+		},
+    {
+      "path": "page/login/login",
+      "style": {
+        "navigationBarTitleText": "登录"
+      }
+    }
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
