@@ -20,6 +20,8 @@
 		{
 			"path": "pages/my/my",
 			"style": {
+        "navigationBarTextStyle": "white",
+        "navigationStyle": "custom",
 				"navigationBarTitleText": "我的"
 			}
 		},
