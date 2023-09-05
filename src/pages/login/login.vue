@@ -4,6 +4,7 @@ import {
   postLogininWeiXinSimpleAPI,
 } from '@/services/login'
 import { onLoad } from '@dcloudio/uni-app'
+import { useMemberStore } from '@/stores/modules/member'
 // 获取code登录凭证
 
 let code = ''
@@ -11,6 +12,7 @@ onLoad(async () => {
   const res = await wx.login()
   code = res.code
 })
+// 企业登录
 const onGetphoneNumber: UniHelper.ButtonOnGetphonenumber = async (event) => {
   const encryptedData = event.details?.encryptedData
   const iv = event.details?.iv
@@ -19,14 +21,24 @@ const onGetphoneNumber: UniHelper.ButtonOnGetphonenumber = async (event) => {
     encryptedData,
     iv,
   })
+  loginSuccess(res.result)
 }
+// 模拟登录
 const onGetphoneNumberSimple = async () => {
   const res = await postLogininWeiXinSimpleAPI('17338353764')
+  loginSuccess(res.result)
+}
+// 登陆成功
+const loginSuccess = (profile: any) => {
+  const memberStore = useMemberStore()
+  memberStore.setProfile(profile)
   uni.showToast({
     title: '登录成功',
     icon: 'success',
   })
-  console.log(res)
+  setTimeout(() => {
+    uni.switchTab({ url: '/pages/my/my' })
+  }, 500)
 }
 </script>
 
