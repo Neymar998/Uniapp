@@ -20,8 +20,8 @@
 		{
 			"path": "pages/my/my",
 			"style": {
-        "navigationBarTextStyle": "white",
-        "navigationStyle": "custom",
+				"navigationBarTextStyle": "white",
+				"navigationStyle": "custom",
 				"navigationBarTitleText": "我的"
 			}
 		},
@@ -49,12 +49,12 @@
 				"navigationBarTitleText": "商品详情"
 			}
 		},
-    {
-      "path": "page/login/login",
-      "style": {
-        "navigationBarTitleText": "登录"
-      }
-    }
+		{
+			"path": "page/login/login",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
+		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -94,5 +94,25 @@
 				"selectedIconPath": "static/tabs/user_selected.png"
 			}
 		]
-	}
+	},
+  // 分包
+	"subPackages": [
+		{
+			"root": "pagesMember",
+			"pages": [
+				{
+					"path": "settings/settings",
+					"style": {
+						"navigationBarTitleText": "设置"
+					}
+				}
+			]
+		}
+	],
+  "preloadRule": {
+    "pages/my/my":{
+      "network": "all",
+      "packages": ["pagesMember"]
+    }
+  }
 }
