@@ -95,7 +95,7 @@
 			}
 		]
 	},
-  // 分包
+	// 分包
 	"subPackages": [
 		{
 			"root": "pagesMember",
@@ -106,21 +106,35 @@
 						"navigationBarTitleText": "设置"
 					}
 				},
+				{
+					"path": "profile/profile",
+					"style": {
+						"navigationBarTitleText": "个人信息",
+						"navigationStyle": "custom",
+						"navigationBarTextStyle": "white"
+					}
+				},
         {
-          "path": "profile/profile",
+          "path": "pagesMember/address-form/address-form",
           "style": {
-            "navigationBarTitleText": "个人信息",
-            "navigationStyle": "custom",
-            "navigationBarTextStyle": "white"
+            "navigationBarTitleText": ""
           }
-        }
+        },
+        {
+					"path": "address/address",
+					"style": {
+						"navigationBarTitleText": "地址管理"
+					}
+				}
 			]
 		}
 	],
-  "preloadRule": {
-    "pages/my/my":{
-      "network": "all",
-      "packages": ["pagesMember"]
-    }
-  }
+	"preloadRule": {
+		"pages/my/my": {
+			"network": "all",
+			"packages": [
+				"pagesMember"
+			]
+		}
+	}
 }
