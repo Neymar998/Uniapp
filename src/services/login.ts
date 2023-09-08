@@ -11,7 +11,7 @@ type LoginParams = {
 export const postLogininWeiXinAPI = (data: LoginParams) => {
   return http<LoginResult>({
     method: 'POST',
-    url: '/login/weixin',
+    url: '/login/wxMin',
     data,
   })
 }
@@ -20,7 +20,7 @@ export const postLogininWeiXinAPI = (data: LoginParams) => {
 export const postLogininWeiXinSimpleAPI = (phoneNumber: string) => {
   return http<LoginResult>({
     method: 'POST',
-    url: '/login/weixin/simple',
+    url: '/login/wxMin/simple',
     data: {
       phoneNumber,
     },

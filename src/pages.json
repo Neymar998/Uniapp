@@ -50,7 +50,7 @@
 			}
 		},
 		{
-			"path": "page/login/login",
+			"path": "pages/login/login",
 			"style": {
 				"navigationBarTitleText": "登录"
 			}
@@ -105,7 +105,15 @@
 					"style": {
 						"navigationBarTitleText": "设置"
 					}
-				}
+				},
+        {
+          "path": "profile/profile",
+          "style": {
+            "navigationBarTitleText": "个人信息",
+            "navigationStyle": "custom",
+            "navigationBarTextStyle": "white"
+          }
+        }
 			]
 		}
 	],
