@@ -115,7 +115,7 @@
 					}
 				},
         {
-          "path": "pagesMember/address-form/address-form",
+          "path": "address-form/address-form",
           "style": {
             "navigationBarTitleText": ""
           }
