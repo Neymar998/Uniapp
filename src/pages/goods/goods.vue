@@ -6,6 +6,7 @@ import { ref } from 'vue'
 
 import ServicePanel from './components/ServicePanel.vue'
 import AddressPanel from './components/AddressPanel.vue'
+import type { SkuPopupLocaldata } from '@/components/vk-data-goods-sku-popup/vk-data-goods-sku-popup'
 
 const { safeAreaInsets } = uni.getSystemInfoSync()
 const query = defineProps<{
@@ -26,7 +27,31 @@ const popUpChangeName = (name: typeof popupName.value) => {
 const getGoodsByIdData = async () => {
   const res = await getGoodsByIdAPI(query.id)
   goods.value = res.result
+  // sku得localdata
+  localdata.value = {
+    _id: res.result.id,
+    name: res.result.name,
+    goods_thumb: res.result.mainPictures[0],
+    spec_list: res.result.specs.map((v) => {
+      return {
+        name: v.name,
+        list: v.values,
+      }
+    }),
+    sku_list: res.result.skus.map((v) => {
+      return {
+        _id: v.id,
+        goods_id: res.result.id,
+        goods_name: res.result.name,
+        image: v.picture,
+        price: v.price * 100,
+        sku_name_arr: v.specs.map((v) => v.valueName),
+        stock: v.inventory,
+      }
+    }),
+  }
 }
+
 const swiperOnChange: UniHelper.SwiperOnChange = (event) => {
   currentSwiperIndex.value = event.detail.current
 }
@@ -37,12 +62,19 @@ const onTapImage = (url: string) => {
     urls: goods.value!.mainPictures,
   })
 }
+
+// sku
+const isShowSku = ref(false)
+const localdata = ref({} as SkuPopupLocaldata)
+
 onLoad(() => {
   getGoodsByIdData()
 })
 </script>
 
 <template>
+  <vk-data-goods-sku-popup v-model="isShowSku" :localdata="localdata">
+  </vk-data-goods-sku-popup>
   <scroll-view scroll-y class="viewport">
     <!-- 基本信息 -->
     <view class="goods">
@@ -72,7 +104,7 @@ onLoad(() => {
 
       <!-- 操作面板 -->
       <view class="action">
-        <view class="item arrow">
+        <view class="item arrow" @tap="isShowSku = true">
           <text class="label">选择</text>
           <text class="text ellipsis"> 请选择商品规格 </text>
         </view>
