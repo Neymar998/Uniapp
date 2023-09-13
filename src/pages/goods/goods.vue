@@ -6,7 +6,11 @@ import { ref } from 'vue'
 
 import ServicePanel from './components/ServicePanel.vue'
 import AddressPanel from './components/AddressPanel.vue'
-import type { SkuPopupLocaldata } from '@/components/vk-data-goods-sku-popup/vk-data-goods-sku-popup'
+import type {
+  SkuPopupInstanceType,
+  SkuPopupLocaldata,
+} from '@/components/vk-data-goods-sku-popup/vk-data-goods-sku-popup'
+import { computed } from 'vue'
 
 const { safeAreaInsets } = uni.getSystemInfoSync()
 const query = defineProps<{
@@ -78,6 +82,12 @@ const openSkupop = (val: SkuMode) => {
   isShowSku.value = true
   mode.value = val
 }
+// sku组件实例
+const SkuPopupRef = ref<SkuPopupInstanceType>()
+const selectArrText = computed(() => {
+  return SkuPopupRef.value?.selectArr?.join(' ').trim() || '请选择商品规格'
+})
+
 onLoad(() => {
   getGoodsByIdData()
 })
@@ -90,6 +100,12 @@ onLoad(() => {
     :mode="mode"
     add-cart-background-color="#FFA868"
     buy-now-background-color="#27BA9B"
+    ref="SkuPopupRef"
+    :actived-style="{
+      color: '#27BA9B',
+      borderColor: '#27BA9B',
+      backgroundColor: '#E9F8F5',
+    }"
   >
   </vk-data-goods-sku-popup>
   <scroll-view scroll-y class="viewport">
@@ -123,7 +139,7 @@ onLoad(() => {
       <view class="action">
         <view class="item arrow" @tap="openSkupop(SkuMode.Both)">
           <text class="label">选择</text>
-          <text class="text ellipsis"> 请选择商品规格 </text>
+          <text class="text ellipsis"> {{ selectArrText }} </text>
         </view>
         <view class="item arrow" @tap="popUpChangeName('Address')">
           <text class="label">送至</text>
