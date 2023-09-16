@@ -17,3 +17,30 @@ export const getMemberCartAPI = () => {
     url: '/member/cart',
   })
 }
+// 删除购物车商品
+export const deleteMemberCartAPI = (data: { ids: string[] }) => {
+  return http({
+    method: 'DELETE',
+    url: '/member/cart/',
+    data,
+  })
+}
+// 修改商品数量
+export const putMemberCartBySkuIdAPI = (
+  skuId: string,
+  data: { selected?: boolean; count?: number },
+) => {
+  return http({
+    method: 'PUT',
+    url: `/member/cart/${skuId}`,
+    data,
+  })
+}
+// 修改商品全选状态
+export const putMemberCartSelectedAllAPI = (data: { selected: boolean }) => {
+  return http({
+    method: 'PUT',
+    url: '/member/cart/selected',
+    data,
+  })
+}
