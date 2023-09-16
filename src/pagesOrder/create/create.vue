@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { getMemberOrderPreAPI } from '@/services/order'
+import { getMemberOrderPreAPI, getMemberOrderPreNowAPI } from '@/services/order'
 import { computed, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import type { OrderPreResult } from '@/types/order'
+import { useAddressStore } from '@/stores/modules/address'
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
 // 订单备注
@@ -21,11 +22,32 @@ const activeDelivery = computed(() => deliveryList.value[activeIndex.value])
 const onChangeDelivery: UniHelper.SelectorPickerOnChange = (ev) => {
   activeIndex.value = ev.detail.value
 }
+//立即购买通过sku的参数跳转到订单页，没有参数就是从购物车跳转到订单页
+const query = defineProps<{
+  skuId?: string
+  count?: string
+}>()
 const orderPre = ref<OrderPreResult>()
 const getMemberOrderPreData = async () => {
-  const res = await getMemberOrderPreAPI()
-  orderPre.value = res.result
+  if (query.skuId && query.count) {
+    const res = await getMemberOrderPreNowAPI({
+      skuId: query.skuId,
+      count: query.count,
+    })
+    orderPre.value = res.result
+  } else {
+    const res = await getMemberOrderPreAPI()
+    orderPre.value = res.result
+  }
 }
+const addressSotre = useAddressStore()
+// 收货地址
+const selecteAddress = computed(() => {
+  return (
+    addressSotre.selectAddress ||
+    orderPre.value?.userAddresses.find((item) => item.isDefault)
+  )
+})
 onLoad(() => {
   getMemberOrderPreData()
 })
@@ -35,13 +57,17 @@ onLoad(() => {
   <scroll-view scroll-y class="viewport">
     <!-- 收货地址 -->
     <navigator
-      v-if="false"
+      v-if="selecteAddress"
       class="shipment"
       hover-class="none"
       url="/pagesMember/address/address?from=order"
     >
-      <view class="user"> 张三 13333333333 </view>
-      <view class="address"> 广东省 广州市 天河区 黑马程序员3 </view>
+      <view class="user"
+        >{{ selecteAddress?.receiver }} {{ selecteAddress?.contact }}</view
+      >
+      <view class="address">
+        {{ selecteAddress?.address }} {{ selecteAddress?.fullLocation }}</view
+      >
       <text class="icon icon-right"></text>
     </navigator>
     <navigator

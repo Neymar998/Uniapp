@@ -6,6 +6,7 @@ import {
 import { ref } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import type { AddressItem } from '@/types/address'
+import { useAddressStore } from '@/stores/modules/address'
 
 const addressList = ref<AddressItem[]>([])
 const getMemberAddressData = async () => {
@@ -30,6 +31,13 @@ const onDeleteAddress = (id: string) => {
     },
   })
 }
+// 提交订单时选择收货地址
+const changeAddress = (item: AddressItem) => {
+  const addressStore = useAddressStore()
+  addressStore.changeselectAddress(item)
+  uni.navigateBack()
+}
+
 onShow(() => {
   getMemberAddressData()
 })
@@ -47,7 +55,7 @@ onShow(() => {
             v-for="item in addressList"
             :key="item.id"
           >
-            <view class="item-content">
+            <view class="item-content" @tap="changeAddress(item)">
               <view class="user">
                 {{ item.receiver }}
                 <text class="contact">{{ item.contact }}</text>
@@ -60,6 +68,7 @@ onShow(() => {
                 class="edit"
                 hover-class="none"
                 :url="`/pagesMember/address-form/address-form?id=${item.id}`"
+                @tap.stop="() => {}"
               >
                 修改
               </navigator>
