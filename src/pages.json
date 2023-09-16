@@ -114,16 +114,27 @@
 						"navigationBarTextStyle": "white"
 					}
 				},
-        {
-          "path": "address-form/address-form",
-          "style": {
-            "navigationBarTitleText": ""
-          }
-        },
-        {
+				{
+					"path": "address-form/address-form",
+					"style": {
+						"navigationBarTitleText": ""
+					}
+				},
+				{
 					"path": "address/address",
 					"style": {
 						"navigationBarTitleText": "地址管理"
+					}
+				}
+			]
+		},
+		{
+			"root": "pagesOrder",
+			"pages": [
+				{
+					"path": "create/create",
+					"style": {
+						"navigationBarTitleText": "创建订单"
 					}
 				}
 			]
