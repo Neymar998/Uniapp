@@ -50,6 +50,26 @@ const onChangeSelectedAll = () => {
   })
   putMemberCartSelectedAllAPI({ selected: _isSelectedAll })
 }
+const selectedCartList = computed(() => {
+  return cartList.value.filter((v) => v.selected)
+})
+const totalPrice = computed(() => {
+  return selectedCartList.value
+    .reduce((sum, item) => sum + item.nowPrice * item.count, 0)
+    .toFixed(2)
+})
+const totalCount = computed(() => {
+  return selectedCartList.value.reduce((sum, item) => sum + item.count, 0)
+})
+const gotopay = () => {
+  if (!totalCount.value) {
+    return uni.showToast({
+      icon: 'none',
+      title: '请选择商品',
+    })
+  }
+  uni.navigateTo({ url: '/pagesOrder/create/create' })
+}
 onShow(() => {
   if (memberStore.profile) {
     getMemberCartData()
@@ -146,10 +166,14 @@ onShow(() => {
           >全选</text
         >
         <text class="text">合计:</text>
-        <text class="amount">100</text>
+        <text class="amount">{{ totalPrice }}</text>
         <view class="button-grounp">
-          <view class="button payment-button" :class="{ disabled: true }">
-            去结算(10)
+          <view
+            class="button payment-button"
+            :class="{ disabled: true }"
+            @tap="gotopay"
+          >
+            去结算({{ totalCount }})
           </view>
         </view>
       </view>
